@@ -4,8 +4,9 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 
 import { UpdateProductDTO } from './dto/UpdateProduct.dto';
@@ -33,9 +34,9 @@ export class ProductController {
     return this.productService.listProducts();
   }
 
-  @Put('/:id')
+  @Patch('/:id')
   async updateProduct(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateProductDTO: UpdateProductDTO,
   ) {
     const product = await this.productService.updateProduct(
