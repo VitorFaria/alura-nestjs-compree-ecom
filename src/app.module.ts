@@ -6,6 +6,8 @@ import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
 import { PostgresConfigService } from './config/postgres.config.service';
 import { OrderModule } from './order/order.module';
+import { APP_FILTER } from '@nestjs/core';
+import { ExceptionFilterHttp } from './filters/exception-filter-http';
 
 @Module({
   imports: [
@@ -20,5 +22,11 @@ import { OrderModule } from './order/order.module';
     }),
     OrderModule,
   ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionFilterHttp
+    }
+  ]
 })
 export class AppModule {}
