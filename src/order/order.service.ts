@@ -1,4 +1,4 @@
-import { UserEntity } from './../user/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -7,7 +7,7 @@ import { OrderEntity } from './entities/order.entity';
 import { In, Repository } from 'typeorm';
 import { OrderStatus } from './enum/OrderStatus.enum';
 import { OrderItemEntity } from './entities/orderItem.entity';
-import { ProductEntity } from '../product/product.entity';
+import { ProductEntity } from '../product/entities/product.entity';
 
 @Injectable()
 export class OrderService {

@@ -8,7 +8,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { OrderEntity } from './order.entity';
-import { ProductEntity } from '../../product/product.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
 
 @Entity({ name: 'orders_items' })
 export class OrderItemEntity {

@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
 } from 'typeorm';
-import { ProductImageEntity } from './product-image.entity';
-import { ProductFeatureEntity } from './product-feature.entity';
-import { OrderItemEntity } from '../order/entities/orderItem.entity';
+import { ProductImageEntity } from '../product-image.entity';
+import { ProductFeatureEntity } from '../product-feature.entity';
+import { OrderItemEntity } from '../../order/entities/orderItem.entity';
 
 @Entity({ name: 'products' })
 export class ProductEntity {
