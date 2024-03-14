@@ -7,7 +7,7 @@ import { UserModule } from './user/user.module';
 import { PostgresConfigService } from './config/postgres.config.service';
 import { OrderModule } from './order/order.module';
 import { APP_FILTER } from '@nestjs/core';
-import { ExceptionFilterHttp } from './filters/exception-filter-http';
+import { ExceptionFilterGlobal } from './filters/exception-filter-global';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { ExceptionFilterHttp } from './filters/exception-filter-http';
   providers: [
     {
       provide: APP_FILTER,
-      useClass: ExceptionFilterHttp
+      useClass: ExceptionFilterGlobal
     }
   ]
 })
