@@ -4,50 +4,74 @@ import {
   IsArray,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsString,
+  IsUrl,
+  MaxLength,
   Min,
   ValidateNested,
 } from 'class-validator';
-import { ProductFeatureDTO, ProductImageDTO } from './CreateProduct.dto';
+import { ProductEntity } from '../entities/product.entity';
 
-export class UpdateProductDTO {
+export class ProductFeatureDTO {
+  id: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'Nome da cadasterística não pode ser vazio' })
+  name: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'Descrição da característica não pode ser vazio' })
+  description: string;
+
+  product: ProductEntity;
+}
+
+export class ProductImageDTO {
+  id: string;
+
+  @IsUrl()
+  url: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'Descrição da imagem não pode ser vazia' })
+  description: string;
+
+  product: ProductEntity;
+}
+
+export class CreateProductDTO {
   @IsString()
   @IsNotEmpty({ message: 'Nome do produto não pode ser vazio' })
-  @IsOptional()
   name: string;
 
   @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
-  @IsOptional()
   @Min(1, { message: 'O valor precisa ser maior que zero' })
-  @IsOptional()
   value: number;
 
   @IsNumber()
   @Min(0, { message: 'Quantidade mínima inválida' })
-  @IsOptional()
   amountAvailable: number;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty({ message: 'Descrição do produto não pode ser vazia ' })
+  @MaxLength(1000, {
+    message: 'Descrição não pode ter mais que 1000 caracteres',
+  })
   description: string;
 
   @ValidateNested()
   @IsArray()
   @ArrayMinSize(1)
   @Type(() => ProductFeatureDTO)
-  @IsOptional()
   features: ProductFeatureDTO[];
 
   @ValidateNested()
   @IsArray()
   @ArrayMinSize(1)
   @Type(() => ProductImageDTO)
-  @IsOptional()
   images: ProductImageDTO[];
 
   @IsString()
   @IsNotEmpty({ message: 'Categoria do produto não pode ser vazia' })
-  @IsOptional()
   category: string;
 }
