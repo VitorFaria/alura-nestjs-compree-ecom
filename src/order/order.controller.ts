@@ -24,6 +24,14 @@ export class OrderController {
     return this.orderService.findOne(+id);
   }
 
+  @Get('/user/:userId')
+  async findOrdersByUser(
+    @Param('userId', ParseUUIDPipe) userId: string
+  ) {
+    const userOrders = await this.orderService.findOrdersByUser(userId);
+    return userOrders;
+  }
+
   @Patch(':id')
   update(@Param('id', ParseUUIDPipe) id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.orderService.updateOrder(id, updateOrderDto);

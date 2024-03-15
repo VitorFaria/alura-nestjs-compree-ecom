@@ -92,6 +92,21 @@ export class OrderService {
     return `This action returns a #${id} order`;
   }
 
+  async findOrdersByUser(userId: string) {
+    try {
+      const userOrders = await this.orderRepository.find({
+        relations: ['user'],
+        where: {
+          user: {id: userId}
+        }
+      })
+
+      return userOrders;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
     try {
       const order = await this.orderRepository.findOneBy({id});
