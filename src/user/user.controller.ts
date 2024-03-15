@@ -4,6 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
+  Patch,
   Post,
   Put,
 } from '@nestjs/common';
@@ -33,9 +35,31 @@ export class UserController {
     return users;
   }
 
-  @Put('/:id')
+  @Get('/:id')
+  async findUserById(
+    @Param('id', ParseUUIDPipe) id: string
+  ) {
+    const user = await this.userService.findUserById(id);
+
+    return {
+      user: new ListUserDTO(user.id, user.name)
+    }
+  }
+
+  // @Get('email/:email')
+  // async findUserByEmail(
+  //   @Param('email') email: string
+  // ) {
+  //   const user = await this.userService.findByEmail(email);
+
+  //   return {
+  //     user: new ListUserDTO(user.id, user.name)
+  //   } 
+  // }
+
+  @Patch('/:id')
   async updateUser(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDTO,
   ) {
     const user = await this.userService.updateUser(
@@ -50,9 +74,9 @@ export class UserController {
   }
 
   @Delete('/:id')
-  async deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     await this.userService.deleteUser(id);
 
-    return 'usuário removido com suceso'
+    return {message: 'usuário removido com suceso'}
   }
 }
