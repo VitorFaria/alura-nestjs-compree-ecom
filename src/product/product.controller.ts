@@ -12,6 +12,7 @@ import {
 import { UpdateProductDTO } from './dto/update-product.dto';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { ProductService } from './product.service';
+import { ListProductDTO } from './dto/list-product.dto';
 
 @Controller('products')
 export class ProductController {
@@ -34,6 +35,21 @@ export class ProductController {
     return this.productService.listProducts();
   }
 
+  @Get('/:id')
+  async findProductById(
+    @Param('id', ParseUUIDPipe) id: string
+  ) {
+    const product = await this.productService.findProductById(id);
+
+    return new ListProductDTO(
+      product.id, 
+      product.name, 
+      product.amountAvailable,
+      product.features,
+      product.images
+    );
+  }
+
   @Patch('/:id')
   async updateProduct(
     @Param('id', ParseUUIDPipe) id: string,
@@ -51,9 +67,13 @@ export class ProductController {
   }
 
   @Delete('/:id')
-  async removeProduct(@Param('id') id: string) {
+  async removeProduct(
+    @Param('id', ParseUUIDPipe) id: string
+  ) {
+    await this.findProductById(id);
+
     await this.productService.removeProduct(id);
 
-    return 'produto removido com sucesso';
+    return {message: 'produto removido com sucesso'};
   }
 }

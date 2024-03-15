@@ -46,6 +46,7 @@ export class ProductService {
           new ListProductDTO(
             product.id,
             product.name,
+            product.amountAvailable,
             product.features,
             product.images,
           ),
@@ -55,6 +56,14 @@ export class ProductService {
     } catch (err) {
       throw err;
     }
+  }
+
+  async findProductById(id: string) {
+    const product = await this.productRepository.findOneBy({ id });
+
+    if (!product) throw new NotFoundException(`Product with ${id} not found`);
+
+    return product;
   }
 
   async updateProduct(id: string, updateProductDTO: UpdateProductDTO) {
@@ -71,6 +80,8 @@ export class ProductService {
   }
 
   async removeProduct(id: string) {
+    await this.findProductById(id);
+
     await this.productRepository.delete(id);
   }
 }
