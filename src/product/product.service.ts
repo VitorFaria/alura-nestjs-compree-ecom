@@ -17,13 +17,7 @@ export class ProductService {
     try {
       const productEntity = new ProductEntity();
   
-      productEntity.name = createProductDTO.name;
-      productEntity.value = createProductDTO.value;
-      productEntity.amountAvailable = createProductDTO.amountAvailable;
-      productEntity.description = createProductDTO.description;
-      productEntity.category = createProductDTO.category;
-      productEntity.features = createProductDTO.features;
-      productEntity.images = createProductDTO.images;
+      Object.assign(productEntity, createProductDTO as ProductEntity)
   
       const product = await this.productRepository.save(productEntity); 
 
@@ -72,7 +66,7 @@ export class ProductService {
   
       if (!product) throw new NotFoundException("Product not found");
   
-      Object.assign(product, updateProductDTO);
+      Object.assign(product, updateProductDTO as ProductEntity);
       return this.productRepository.save(product);
     } catch(err) {
       throw err;

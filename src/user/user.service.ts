@@ -14,13 +14,15 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDTO) {
-    const userEntity = new UserEntity();
-
-    userEntity.email = createUserDto.email;
-    userEntity.password = createUserDto.password;
-    userEntity.name = createUserDto.name;
-
-    return this.UserRepository.save(userEntity);
+    try {
+      const userEntity = new UserEntity();
+  
+      Object.assign(userEntity, createUserDto as UserEntity);
+  
+      return this.UserRepository.save(userEntity);
+    } catch (err) {
+      throw err;
+    }
   }
 
   async listUsers() {
@@ -50,14 +52,24 @@ export class UserService {
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDTO) {
-    await this.findUserById(id);
+    try {
+      const user = await this.findUserById(id);
 
-    await this.UserRepository.update(id, updateUserDto);
+      Object.assign(user, updateUserDto as UserEntity)
+  
+      return await this.UserRepository.save(user);
+    } catch (err) {
+      throw err;
+    }
   }
 
   async deleteUser(id: string) {
-    await this.findUserById(id);
-
-    await this.UserRepository.delete(id);
+    try {
+      await this.findUserById(id);
+  
+      await this.UserRepository.delete(id);
+    } catch (err) {
+      throw err;
+    }
   }
 }

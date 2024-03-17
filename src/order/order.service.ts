@@ -113,7 +113,7 @@ export class OrderService {
   
       if (!order) throw new NotFoundException("Order not found");
       
-      Object.assign(order, updateOrderDto);
+      Object.assign(order, updateOrderDto as OrderEntity);
       return await this.orderRepository.save(order);
 
     } catch (err) {
