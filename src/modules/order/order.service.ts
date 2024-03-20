@@ -133,6 +133,7 @@ export class OrderService {
   //   return orders;
   // }
 
+  // Adicionar validação, para voltar a quantidade disponível do produto, caso o pedido seja cancelado
   async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
     try {
       const order = await this.orderRepository.findOneBy({id});

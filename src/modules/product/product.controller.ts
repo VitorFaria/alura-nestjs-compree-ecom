@@ -7,12 +7,14 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { UpdateProductDTO } from './dto/update-product.dto';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { ProductService } from './product.service';
 import { ListProductDTO } from './dto/list-product.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('products')
 export class ProductController {
@@ -36,6 +38,7 @@ export class ProductController {
   }
 
   @Get('/:id')
+  @UseInterceptors(CacheInterceptor)
   async findProductById(
     @Param('id', ParseUUIDPipe) id: string
   ) {
