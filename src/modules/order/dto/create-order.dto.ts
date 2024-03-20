@@ -8,8 +8,6 @@ export class OrderItemDTO {
   @IsInt()
   @IsNotEmpty({ message: "Quantidade não pode ser vazio" })
   quantity: number;
-
-  // order: OrderEntity;
 }
 
 
