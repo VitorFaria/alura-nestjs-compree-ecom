@@ -4,7 +4,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderEntity } from './entities/order.entity';
-import { In, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { OrderStatus } from './enum/OrderStatus.enum';
 import { OrderItemEntity } from './entities/orderItem.entity';
 import { ProductEntity } from '../product/entities/product.entity';
@@ -33,7 +33,7 @@ export class OrderService {
     createOrderDto.orderItems.forEach((orderItem) => {
       const relatedProduct = relatedProducts.find((product) => product.id === orderItem.productId);
 
-      if (relatedProduct === undefined) throw new NotFoundException(`Product with id ${orderItem.productId} was not found`);
+      if (relatedProduct === undefined) throw new NotFoundException(`Produto de id ${orderItem.productId} não foi encontrado`);
 
 
       if (relatedProduct.amountAvailable < orderItem.quantity) {
@@ -41,6 +41,19 @@ export class OrderService {
           é maior do que a disponível (${relatedProduct.amountAvailable}) para este produto`);
       }
     })
+  }
+
+  private async checkOrderStatusOnUpdate(orderStatus: OrderStatus, order: OrderEntity)
+  {
+    if (orderStatus === OrderStatus.PROCESSING) {
+      throw new BadRequestException("Este pedido não pode ser alterado para este status");
+    }
+
+    if (order.orderStatus === orderStatus) {
+      throw new BadRequestException("Status de pedido já atualizado");
+    }
+    
+    return order;
   }
 
   async createOrder(userId: string, createOrderDTO: CreateOrderDto) {
@@ -88,8 +101,8 @@ export class OrderService {
     return `This action returns all order`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  async findOne(id: string) {
+    return 'This action returns a order';
   }
 
   async findOrdersByUser(userId: string) {
@@ -107,11 +120,25 @@ export class OrderService {
     }
   }
 
+  // Needs adjustments
+  // async findByFilter(orderStatus: OrderStatus, userName: string) {
+  //   const orders = await this.orderRepository.find({
+  //     relations: ['user'],
+  //     where: {
+  //       user: {name: Like(`%${userName}%`)},
+  //       orderStatus: orderStatus,
+  //     },
+  //   });
+    
+  //   return orders;
+  // }
+
   async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
     try {
       const order = await this.orderRepository.findOneBy({id});
-  
-      if (!order) throw new NotFoundException("Order not found");
+      if (!order) throw new NotFoundException("Pedido não encontrado");
+
+      await this.checkOrderStatusOnUpdate(updateOrderDto.orderStatus, order);
       
       Object.assign(order, updateOrderDto as OrderEntity);
       return await this.orderRepository.save(order);

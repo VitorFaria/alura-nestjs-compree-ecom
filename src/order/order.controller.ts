@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseUUIDPipe
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { OrderStatus } from './enum/OrderStatus.enum';
 
 @Controller('orders')
 export class OrderController {
@@ -14,14 +15,20 @@ export class OrderController {
     return order;
   }
 
-  @Get()
-  findAll() {
-    return this.orderService.findAll();
-  }
+  // @Get()
+  // async findByFilter(
+  //   @Query('orderStatus') orderStatus: OrderStatus,
+  //   @Query('user') userName: string
+  // ) {
+    
+  //   const orders = await this.orderService.findByFilter(orderStatus, userName);
+
+  //   return orders;
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
+    return this.orderService.findOne(id);
   }
 
   @Get('/user/:userId')
