@@ -3,22 +3,27 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   ParseUUIDPipe,
   Patch,
   Post,
-  UseInterceptors,
 } from '@nestjs/common';
 
 import { UpdateProductDTO } from './dto/update-product.dto';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { ProductService } from './product.service';
 import { ListProductDTO } from './dto/list-product.dto';
-import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { ProductEntity } from './entities/product.entity';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   @Post()
   async createProduct(@Body() createProductDTO: CreateProductDTO) {
@@ -34,15 +39,28 @@ export class ProductController {
 
   @Get()
   async listProducts() {
-    return this.productService.listProducts();
+    let products = await this.cacheManager.get<ListProductDTO[]>('products')
+
+    if (!products) {
+      products = await this.productService.listProducts();
+
+      await this.cacheManager.set('products', products);
+    }
+
+    return products;
   }
 
   @Get('/:id')
-  @UseInterceptors(CacheInterceptor)
   async findProductById(
     @Param('id', ParseUUIDPipe) id: string
   ) {
-    const product = await this.productService.findProductById(id);
+    let product = await this.cacheManager.get<ProductEntity>(`product-${id}`);
+
+    if (!product) {
+      product = await this.productService.findProductById(id);
+
+      await this.cacheManager.set(`product-${id}`, product);
+    }
 
     return new ListProductDTO(
       product.id, 
