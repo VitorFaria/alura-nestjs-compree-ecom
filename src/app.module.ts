@@ -9,6 +9,7 @@ import { OrderModule } from './modules/order/order.module';
 import { APP_FILTER } from '@nestjs/core';
 import { ExceptionFilterGlobal } from './resources/filters/exception-filter-global';
 import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
@@ -22,7 +23,12 @@ import { CacheModule } from '@nestjs/cache-manager';
       inject: [PostgresConfigService],
     }),
     OrderModule,
-    CacheModule.register({ isGlobal: true, ttl: 10000 }),
+    CacheModule.registerAsync({
+      useFactory: async () => ({
+        store: await redisStore({ ttl: 10 * 1000 })
+      }),
+      isGlobal: true,
+    })
   ],
   providers: [
     {
