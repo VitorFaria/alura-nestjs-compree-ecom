@@ -134,9 +134,15 @@ export class OrderService {
   // }
 
   // Adicionar validação, para voltar a quantidade disponível do produto, caso o pedido seja cancelado
-  async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
+  async updateOrder(id: string, userId: string, updateOrderDto: UpdateOrderDto) {
     try {
-      const order = await this.orderRepository.findOneBy({id});
+      const order = await this.orderRepository.findOne({
+        where: {
+          id,
+          user: {id: userId}
+        }
+      });
+
       if (!order) throw new NotFoundException("Pedido não encontrado");
 
       await this.checkOrderStatusOnUpdate(updateOrderDto.orderStatus, order);
