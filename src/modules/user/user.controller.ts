@@ -12,14 +12,22 @@ import { UpdateUserDTO } from './dto/update-user.dto';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ListUserDTO } from './dto/list-user.dto';
 import { UserService } from './user.service';
+import { HashPasswordPipe } from '../../resources/pipes/hash-password.pipe';
 
 @Controller('/users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDTO) {
-    const user = await this.userService.createUser(createUserDto);
+  async createUser(
+    @Body() createUserDto: CreateUserDTO,
+    @Body('password', HashPasswordPipe) hashedPassword: string
+  ) {
+
+    const user = await this.userService.createUser({
+      ...createUserDto,
+      password: hashedPassword
+    });
 
     return {
       user: new ListUserDTO(user.id, user.name),
