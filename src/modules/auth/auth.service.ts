@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 export interface UserPayload {
   sub: string;
   username: string;
+  email: string;
 }
 
 @Injectable()
@@ -29,14 +30,10 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
-    const payload: UserPayload = { sub: user.id, username: user.name }
+    const payload: UserPayload = { sub: user.id, username: user.name, email: user.email }
 
     return {
       accessToken: await this.jwtService.signAsync(payload)
     };
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
   }
 }
