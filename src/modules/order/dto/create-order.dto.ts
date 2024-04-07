@@ -6,7 +6,7 @@ export class OrderItemDTO {
   productId: string;
 
   @IsInt()
-  @IsNotEmpty({ message: "Quantidade não pode ser vazio" })
+  @IsNotEmpty()
   quantity: number;
 }
 

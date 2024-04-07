@@ -4,7 +4,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderEntity } from './entities/order.entity';
-import { In, Like, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { OrderStatus } from './enum/OrderStatus.enum';
 import { OrderItemEntity } from './entities/orderItem.entity';
 import { ProductEntity } from '../product/entities/product.entity';
@@ -33,12 +33,12 @@ export class OrderService {
     createOrderDto.orderItems.forEach((orderItem) => {
       const relatedProduct = relatedProducts.find((product) => product.id === orderItem.productId);
 
-      if (relatedProduct === undefined) throw new NotFoundException(`Produto de id ${orderItem.productId} não foi encontrado`);
+      if (relatedProduct === undefined) throw new NotFoundException(`Product with id ${orderItem.productId} not found`);
 
 
       if (relatedProduct.amountAvailable < orderItem.quantity) {
-        throw new BadRequestException(`A quantidade solicitada (${orderItem.quantity}) 
-          é maior do que a disponível (${relatedProduct.amountAvailable}) para este produto`);
+        throw new BadRequestException(`Amount requested (${orderItem.quantity}) 
+          is greater than the amount avaliable (${relatedProduct.amountAvailable}) to this product`);
       }
     })
   }
@@ -46,11 +46,11 @@ export class OrderService {
   private async checkOrderStatusOnUpdate(orderStatus: OrderStatus, order: OrderEntity)
   {
     if (orderStatus === OrderStatus.PROCESSING) {
-      throw new BadRequestException("Este pedido não pode ser alterado para este status");
+      throw new BadRequestException("This order cannot be set to this status");
     }
 
     if (order.orderStatus === orderStatus) {
-      throw new BadRequestException("Status de pedido já atualizado");
+      throw new BadRequestException("Order status already updated");
     }
     
     return order;
@@ -143,7 +143,7 @@ export class OrderService {
         }
       });
 
-      if (!order) throw new NotFoundException("Pedido não encontrado");
+      if (!order) throw new NotFoundException("Order not found");
 
       await this.checkOrderStatusOnUpdate(updateOrderDto.orderStatus, order);
       
