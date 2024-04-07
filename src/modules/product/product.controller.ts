@@ -17,19 +17,25 @@ import { ListProductDTO } from './dto/list-product.dto';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ProductEntity } from './entities/product.entity';
+import { CustomLogger } from '../customLogger/logger.service';
 
 @Controller('products')
 export class ProductController {
   constructor(
     private readonly productService: ProductService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+    private readonly logger: CustomLogger,
+  ) {
+    this.logger.setContext(ProductController.name);
+  }
 
   @Post()
   async createProduct(@Body() createProductDTO: CreateProductDTO) {
     const product = await this.productService.createProduct(
       createProductDTO,
     );
+
+    this.logger.logfile(product)
 
     return {
       message: 'Produto criado com sucesso.',
