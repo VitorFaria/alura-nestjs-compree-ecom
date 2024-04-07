@@ -38,7 +38,7 @@ export class ProductController {
     this.logger.logfile(product)
 
     return {
-      message: 'Produto criado com sucesso.',
+      message: 'Product successfully created.',
       product: product,
     };
   }
@@ -88,7 +88,7 @@ export class ProductController {
     );
 
     return {
-      message: 'produto atualizado com sucesso',
+      message: 'product successfully updated',
       produto: product,
     };
   }
@@ -101,6 +101,6 @@ export class ProductController {
 
     await this.productService.removeProduct(id);
 
-    return {message: 'produto removido com sucesso'};
+    return {message: 'product successfully removed'};
   }
 }

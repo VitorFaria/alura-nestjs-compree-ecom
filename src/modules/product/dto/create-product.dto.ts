@@ -16,11 +16,11 @@ export class ProductFeatureDTO {
   id: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Nome da cadasterística não pode ser vazio' })
+  @IsNotEmpty()
   name: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Descrição da característica não pode ser vazio' })
+  @IsNotEmpty()
   description: string;
 
   product: ProductEntity;
@@ -33,7 +33,7 @@ export class ProductImageDTO {
   url: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Descrição da imagem não pode ser vazia' })
+  @IsNotEmpty()
   description: string;
 
   product: ProductEntity;
@@ -41,22 +41,20 @@ export class ProductImageDTO {
 
 export class CreateProductDTO {
   @IsString()
-  @IsNotEmpty({ message: 'Nome do produto não pode ser vazio' })
+  @IsNotEmpty()
   name: string;
 
   @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
-  @Min(1, { message: 'O valor precisa ser maior que zero' })
+  @Min(1)
   value: number;
 
   @IsNumber()
-  @Min(0, { message: 'Quantidade mínima inválida' })
+  @Min(0)
   amountAvailable: number;
 
   @IsString()
-  @IsNotEmpty({ message: 'Descrição do produto não pode ser vazia ' })
-  @MaxLength(1000, {
-    message: 'Descrição não pode ter mais que 1000 caracteres',
-  })
+  @IsNotEmpty()
+  @MaxLength(1000)
   description: string;
 
   @ValidateNested()
@@ -72,6 +70,6 @@ export class CreateProductDTO {
   images: ProductImageDTO[];
 
   @IsString()
-  @IsNotEmpty({ message: 'Categoria do produto não pode ser vazia' })
+  @IsNotEmpty()
   category: string;
 }
