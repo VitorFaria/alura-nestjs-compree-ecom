@@ -31,7 +31,7 @@ export class UserController {
 
     return {
       user: new ListUserDTO(user.id, user.name),
-      message: 'usuário criado com sucesso',
+      message: 'user successfully created',
     };
   }
 
@@ -76,7 +76,7 @@ export class UserController {
 
     return {
       user: user,
-      message: 'usuário atualizado com sucesso',
+      message: 'user successfully updated',
     };
   }
 
@@ -84,6 +84,6 @@ export class UserController {
   async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     await this.userService.deleteUser(id);
 
-    return {message: 'usuário removido com suceso'}
+    return {message: 'usuário successfully removed'}
   }
 }
