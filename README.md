@@ -29,9 +29,11 @@
 This project is an example of an API REST made with nestJS framework to simulate some functionalities of an ecommerce workflow.
 Some of the functionalities available in this mini application:
 - Users management
+- Authentication
 - Product Management
 - Order management
-- Error handling 
+- Error handling
+- Logging 
 
 To install and run this project, you must have a preset of these stack on your environment:
 - node installed
