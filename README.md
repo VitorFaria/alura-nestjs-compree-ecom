@@ -41,6 +41,19 @@ To install and run this project, you must have a preset of these stack on your e
 
 When you clone this repository, you'll see a .env.example file in the root folder. You should duplicate the .env.example file, 
 name it .env and put the credentials you wish to access the postgres database
+To set up SALT_PASSWORD & JWT_SECRET inside your .env file, there are a few ways you can do it. Here's a quick way that i used for my app configuration.
+SALT_PASSWORD GENERATE: On your console you should type <b>node</b>, to enter inside node console. After that, add the following lines:
+```bash
+$ const bcrypt = require('bcrypt')
+$ bcrypt.genSaltSync(10)
+```
+Copy the hash generated and replace it in the SALT_PASSWORD variable
+
+JWT_SECRET GENERATE: Still with node console opened, add the following line:
+```bash
+$ require('crypto').randomBytes(64).toString('hex')
+```
+Copy the hash generated and replace it in the JWT_SECRET variable
 
 ## Installation
 
