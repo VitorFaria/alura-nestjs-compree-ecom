@@ -79,7 +79,7 @@ $ npm run start
 $ npm run start:dev
 
 $ When you run the app, you probably going to see an error. This is because the database was not automatically created when
-$ you stated the app. To fix that, you should follow these instructions to solve it
+$ you started the app. To fix that, you should follow these instructions to solve it
 $ Go to your browser and access the postgres admin, on localhost:8081 and login with the .env credentials
 $ Once you are logged in, click on "Add New Server". It will open an modal 
 $ On the General tab, insert the name of your server in the "Name" field
